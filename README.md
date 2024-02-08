@@ -40,3 +40,17 @@ btnPrev.addEventListener("click", () => {
   ScrolTo(3, 15, "left");
 });
 ```
+
+```html
+<!-- Estructura HTML-->
+<div class="container">
+  <button class="next"></button>
+  <div class="carrousel">
+    <div class="item">Tú contenido</div>
+    <div class="item">Tú contenido</div>
+    <div class="item">Tú contenido</div>
+    <div class="item">Tú contenido</div>
+  </div>
+  <button class="prev"></button>
+</div>
+```
