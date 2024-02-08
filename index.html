@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        display: grid;
+        place-items: center;
+        height: 100dvh;
+      }
+
+      .container {
+        position: relative;
+
+        .carrousel {
+          display: flex;
+          gap: 20px;
+          width: 620px;
+          overflow: hidden;
+          scroll-behavior: smooth;
+          background: #181818;
+          .item {
+            min-width: 200px;
+            height: 200px;
+            display: inline-block;
+            font-size: 50px;
+            box-sizing: border-box;
+            text-align: center;
+            background-color: #08f;
+            color: #fff;
+          }
+        }
+
+        button {
+          top: calc(50% - 25px);
+          position: absolute;
+          width: 50px;
+          height: 50px;
+          cursor: pointer;
+          border: none;
+          border-radius: 100%;
+          background: #f8f;
+        }
+
+        button.prev {
+          display: none;
+          left: 0;
+          &.view {
+            display: inline-block !important;
+          }
+        }
+
+        button.next {
+          right: 0;
+        }
+      }
+
+      @keyframes animation {
+        from {
+          width: 0;
+        }
+        to {
+          background: #0f8;
+          width: 200px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <button class="next"></button>
+      <div class="carrousel">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+        <div class="item">7</div>
+        <div class="item">8</div>
+        <div class="item">9</div>
+        <div class="item">10</div>
+      </div>
+      <button class="prev"></button>
+    </div>
+
+    <script>
+      const carrousel = document.querySelector(".carrousel");
+      const btnNext = document.querySelector(".next");
+      const btnPrev = document.querySelector(".prev");
+      let items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+
+      // Esta función añade elementos div a el carrousel denpenddiendo de items[].length
+      // const renderViews = () => {
+      //   for (let i = 0; i < items.length; i++) {
+      //     const divElement = document.createElement("div");
+      //     divElement.classList.add("item");
+      //     divElement.textContent = items[i];
+      //     divElement.setAttribute("data-index", items[i]);
+
+      //     carrousel.append(divElement);
+      //   }
+      // };
+      // renderViews();
+
+      let click = 0;
+      let isScrolling = false;
+      const ScrolTo = (viewElm, margin, moveTo) => {
+        if (isScrolling) return; // evitar cliks que rompan el flujo del carrousel
+
+        isScrolling = true;
+
+        // Se registra cada click que se da en el botón
+        // para saber en que elemento HTML se encuentra
+        const HTMLItems = Array.from(document.querySelectorAll(".item"));
+        const elem = HTMLItems[click];
+
+        if (moveTo === "right") {
+          click++;
+          /*
+            Se mueve el scroll a la dereha, se divide el scroll visible entre los elmentos visibles
+            para moverlo de manera equitativa
+          */
+          carrousel.scrollLeft +=
+            Math.round(carrousel.offsetWidth / viewElm) + margin;
+          btnPrev.classList.add("view");
+          if (click === HTMLItems.length - viewElm + 1) {
+            carrousel.scrollLeft = 0;
+            click = 0;
+            btnPrev.classList.remove("view");
+          }
+        } else if (moveTo === "left") {
+          click--;
+          carrousel.scrollLeft -=
+            Math.round(carrousel.offsetWidth / viewElm) + margin;
+          if (click === 0) {
+            btnPrev.classList.remove("view");
+            carrousel.scrollLeft = 0;
+          }
+        } else {
+          console.log(`(${moveTo}) Is not a param: left or right`);
+        }
+
+        setTimeout(() => {
+          isScrolling = false;
+        }, 500);
+      };
+
+      btnNext.addEventListener("click", () => {
+        ScrolTo(3, 15, "right");
+      });
+
+      btnPrev.addEventListener("click", () => {
+        ScrolTo(3, 15, "left");
+      });
+    </script>
+  </body>
+</html>
